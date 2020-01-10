@@ -5,39 +5,72 @@
 //  Created by SanDEV on 2020-01-08.
 //  Copyright © 2020 SanDEV. All rights reserved.
 //
+
+
 import UIKit
-class ViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
 
-    let reuseIdentifier = "cell" // also enter this string as the cell identifier in the storyboard
-    var items = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"]
-     let cc = [UIColor(red: CGFloat(160/255), green: CGFloat(183.0/255), blue: CGFloat(227.0/255), alpha: 1), UIColor(red: CGFloat(160/255), green: CGFloat(183.0/255), blue: CGFloat(227.0/255), alpha: 1)]
+class ViewController: UIViewController {
+    var currentCounter = 0
+    let colorArray = [
+                      [UIColor.red,UIColor.green],
+                      [#colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1), UIColor.red],
+                      [UIColor.blue, UIColor.yellow] ,
+                      [UIColor.cyan, UIColor.darkGray] ,
+                      [UIColor.black , UIColor.white],
+                      [UIColor.brown , UIColor.magenta] ,
+                      [UIColor.gray , UIColor.orange] ,
+                      [UIColor.green , UIColor.purple] ,
+                      [UIColor.magenta , UIColor.brown] ,
+                      [UIColor.orange , UIColor.gray] ,
+                      [UIColor.purple , UIColor.green],
+                      [UIColor.white, UIColor.black] ,
+                      [UIColor.yellow, UIColor.blue] ,
+                      [UIColor .darkGray, UIColor.cyan] ,
+                      [UIColor.lightGray , #colorLiteral(red: 0.09019608051, green: 0, blue: 0.3019607961, alpha: 1)]
+    ]
 
-
-    // MARK: - UICollectionViewDataSource protocol
-
-    // tell the collection view how many cells to make
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.items.count
+    @IBOutlet var boxes : [UIButton]!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        
+        boxes.forEach {
+            $0.setTitle("", for: .normal)
+        }
+        
+       var leftOverBoxes = boxes
+        var leftOverColors = colorArray
+        let timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true)
+        
+        {
+            timer in
+            
+                self.currentCounter += 1
+            if(self.currentCounter < 16) {
+                var currentBox = leftOverBoxes?.randomElement()
+                
+            let x = leftOverBoxes?.firstIndex(of: currentBox!)
+            leftOverBoxes?.remove(at:  x!)
+                
+                var elementOfColor = leftOverColors.randomElement()!
+            
+                
+                currentBox?.backgroundColor = elementOfColor[0];
+                currentBox?.setTitle("\(self.currentCounter)", for: .normal)
+                currentBox?.setTitleColor(elementOfColor[1], for: .normal)
+                
+                let y = leftOverColors.firstIndex(of: elementOfColor)
+                leftOverColors .remove(at:  y!)
+                
+                
+        }
+        
+    }
+        
     }
 
-    // make a cell for each cell index path
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
-        // get a reference to our storyboard cell
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath as IndexPath) as! MyCollectionViewCell
-
-        // Use the outlet in our custom class to get a reference to the UILabel in the cell
-        cell.myLabel.text = self.items[indexPath.item]
-        cell.backgroundColor = UIColor.
-        // make cell more visible in our example project
-
-        return cell
-    }
-
-    // MARK: - UICollectionViewDelegate protocol
-
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        // handle tap events
-        print("You selected cell #\(indexPath.item)!")
-    }
 }
+
+ 
